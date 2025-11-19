@@ -12,9 +12,9 @@ from openai import RateLimitError
 load_dotenv()
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"] = "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"
+os.environ["LANGCHAIN_API_KEY"] = "API_KEY"
 os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
-os.environ["OPENAI_API_KEY"]="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"
+os.environ["OPENAI_API_KEY"]="sk-proj-API_KEY"
 # ---------------------------
 # 1️⃣ Load PDF document
 # ---------------------------

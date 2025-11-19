@@ -27,7 +27,7 @@ TOOLS = {
 }
 JIRA_BASE_URL = "https://agent-ui-ai.atlassian.net"  # e.g. https://your-domain.atlassian.net
 JIRA_EMAIL = "ajay.jamiahamdard@gmail.com"
-JIRA_API_TOKEN = "ATATT3xFfGF0KKWs_PbNLGm8T7VIvSGJ6Tg98FuGb36IRpBpwNFGbE0NYTVhGb0xX_DUHttQ8Q-ic7lBYwX34d5IhBrTyx4sutNJRcLWjybzmpA5UTxLm9R9TF3ZARSZhJ25ALQxHA79xXgmIjRyXSUHCoABCNJGPuIu-bXhS8jdIAd5w32MGcc=05D45BEB"
+JIRA_API_TOKEN = "API-KEY"
 JIRA_PROJECT_KEY = "AG"
 
 class CreateJiraRequest(BaseModel):

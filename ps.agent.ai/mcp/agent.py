@@ -21,11 +21,8 @@ os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"] = "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"
+os.environ["LANGCHAIN_API_KEY"] = "API_KEY"
 os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
-os.environ[
-    "OPENAI_API_KEY"] = "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"
-                        # "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"
 
 # Define chat state
 class ChatState(TypedDict):
@@ -48,10 +45,10 @@ class SmartChatAgent:
         os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
         os.environ["LANGCHAIN_TRACING_V2"] = "true"
         os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-        os.environ["LANGCHAIN_API_KEY"] = "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"
+        os.environ["LANGCHAIN_API_KEY"] = "LANGCHAIN_API_KEY"
         os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
         os.environ[
-            "OPENAI_API_KEY"] = "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"
+            "OPENAI_API_KEY"] = "API_KEY"
 
         # ---------------------------------------------------------------------------
         # 2️⃣  Initialize LLM + MCP tool
