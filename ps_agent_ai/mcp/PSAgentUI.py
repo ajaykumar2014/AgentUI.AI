@@ -6,7 +6,7 @@ import streamlit as st
 from langchain_core.messages import HumanMessage
 import streamlit.web.cli as stcli
 import sys
-from agent import ChatState, SmartChatAgent
+from agent import SmartChatAgent
 
 st.set_page_config(page_title="Chat UI")
 st.markdown("""

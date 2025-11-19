@@ -8,7 +8,10 @@ from langchain.memory import ConversationBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.chains import RetrievalQA
+from langchain_openai import ChatOpenAI
+
+
+
 
 # ✅ Choose a free chat model
 # Option 1: Use Hugging Face Inference API (requires a free HF token)

@@ -2,7 +2,7 @@ import json
 from types import coroutine
 from typing import Dict, Any
 
-from langchain.tools import StructuredTool
+from langchain_core.tools import StructuredTool
 from langsmith import traceable
 from pydantic import BaseModel, Field
 from loguru import logger

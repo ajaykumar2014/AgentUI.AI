@@ -1,4 +1,3 @@
-import json
 import uuid
 
 import httpx
@@ -7,16 +6,18 @@ from docutils.nodes import description
 from fastapi import FastAPI, HTTPException, Query, Body
 from langsmith import traceable
 from loguru import logger
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import requests
 from mcp.server.fastmcp import FastMCP
-from pydantic import BaseModel
 from requests.auth import HTTPBasicAuth
 from pydantic import BaseModel
 from tools import uuid_tool,math_tool
 from tools.jira_api_service import  JiraTool
 from models import ToolInfo,InvokeRequest
 from tools.jira_api_model import  JiraRouterRequest
+import os
+from dotenv import load_dotenv
+
 app = FastAPI(title="MCP API Server", version="1.0")
 mcp = FastMCP("MCP Server")
 
@@ -25,10 +26,14 @@ TOOLS = {
     math_tool.TOOL_META["name"]: math_tool,
 
 }
-JIRA_BASE_URL = "https://agent-ui-ai.atlassian.net"  # e.g. https://your-domain.atlassian.net
-JIRA_EMAIL = "ajay.jamiahamdard@gmail.com"
-JIRA_API_TOKEN = "API-KEY"
-JIRA_PROJECT_KEY = "AG"
+load_dotenv(override=True)
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
+JIRA_BASE_URL=os.getenv("JIRA_BASE_URL")
+JIRA_EMAIL=os.getenv("JIRA_EMAIL")
+JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN")
+JIRA_PROJECT_KEY=os.getenv("JIRA_PROJECT_KEY")
 
 class CreateJiraRequest(BaseModel):
     payload: dict

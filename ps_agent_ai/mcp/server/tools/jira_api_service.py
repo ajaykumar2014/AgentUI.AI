@@ -4,14 +4,25 @@ from typing import Dict, Any
 import requests
 from langgraph.checkpoint.memory import logger
 from requests.auth import HTTPBasicAuth
-from .jira_api_model import JiraRouterRequest
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
+JIRA_BASE_URL=os.getenv("JIRA_BASE_URL")
+JIRA_EMAIL=os.getenv("JIRA_EMAIL")
+JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN")
+JIRA_PROJECT_KEY=os.getenv("JIRA_PROJECT_KEY")
 
 class JiraTool:
     def __init__(self):
-        self.baseUrl = "https://agent-ui-ai.atlassian.net"  # e.g. https://your-domain.atlassian.net
-        self.email = "ajay.jamiahamdard@gmail.com"
-        self.token = "ATATT3xFfGF0KKWs_PbNLGm8T7VIvSGJ6Tg98FuGb36IRpBpwNFGbE0NYTVhGb0xX_DUHttQ8Q-ic7lBYwX34d5IhBrTyx4sutNJRcLWjybzmpA5UTxLm9R9TF3ZARSZhJ25ALQxHA79xXgmIjRyXSUHCoABCNJGPuIu-bXhS8jdIAd5w32MGcc=05D45BEB"
-        self.projectKey = "AG"
+        self.baseUrl = JIRA_BASE_URL  # e.g. https://your-domain.atlassian.net
+        self.email = JIRA_EMAIL
+        self.token = JIRA_API_TOKEN
+        self.projectKey = JIRA_PROJECT_KEY
 
     def content_jira_issue_payload(self,text: str) -> Dict[str, Any]:
         # simple convert: each non-empty line -> paragraph

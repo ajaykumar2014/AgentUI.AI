@@ -11,21 +11,6 @@ from langchain.chains import RetrievalQA
 from langchain_community.chat_models import ChatHuggingFace
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-
-# Option 2 (if installed): use Ollama locally
-# from langchain_community.chat_models import ChatOllama
-
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
-os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"] = "lsv2_pt_API_KEY"
-os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
-os.environ[
-    "OPENAI_API_KEY"] = "sk-proj-API_KEY"
-
 class VectorRAG:
     """
     MCP tool using local

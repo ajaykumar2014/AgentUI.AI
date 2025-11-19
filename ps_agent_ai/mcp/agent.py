@@ -1,28 +1,27 @@
 import asyncio
 import os, json, re
-from dotenv import load_dotenv
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, AnyMessage, SystemMessage
-from langgraph.graph import StateGraph, START, END, add_messages
+from langgraph.graph import StateGraph, END, add_messages
 from typing import TypedDict, Annotated, Dict, Any
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.constants import START
 from langgraph.managed import RemainingSteps
 from langchain_openai import ChatOpenAI
-from langgraph.prebuilt import create_react_agent, ToolNode
+
+from langgraph.prebuilt import create_react_agent
+
 from langsmith import traceable
 from pydantic import BaseModel
-from guardrails import Guard
 
 from client.mcp_tools import get_mcp_tool,decide_tool,get_jira_tool
 from vectorReg_v1 import VectorRAG_V1
-load_dotenv()
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
-os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"] = "API_KEY"
-os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
+
+import os
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
 
 # Define chat state
 class ChatState(TypedDict):
@@ -45,10 +44,10 @@ class SmartChatAgent:
         os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
         os.environ["LANGCHAIN_TRACING_V2"] = "true"
         os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-        os.environ["LANGCHAIN_API_KEY"] = "LANGCHAIN_API_KEY"
+        os.environ["LANGCHAIN_API_KEY"] = LANGCHAIN_API_KEY
         os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
         os.environ[
-            "OPENAI_API_KEY"] = "API_KEY"
+            "OPENAI_API_KEY"] = OPENAI_API_KEY
 
         # ---------------------------------------------------------------------------
         # 2️⃣  Initialize LLM + MCP tool
@@ -59,10 +58,9 @@ class SmartChatAgent:
         self.jira_tool = get_jira_tool()
         # llm_with_tools = llm.bind_tools([mcp_tool])
         self.chatbot = create_react_agent(self.llm, tools=[self.mcp_tool,self.jira_tool],state_schema=ChatState)
-
         # Compile LangGraph
         self.graph = self._build_graph()
-        self.guard = Guard.for_rail("guardrail/render_issue_validation.rail")
+        # self.guard = Guard.for_rail("guardrail/render_issue_validation.rail")
 
     async def dispatcher_node(self,state: ChatState):
         last_msg: BaseMessage = state['messages'][-1]
