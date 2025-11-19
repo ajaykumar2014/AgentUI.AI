@@ -20,10 +20,10 @@ os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"] = "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"
+os.environ["LANGCHAIN_API_KEY"] = "lsv2_pt_API_KEY"
 os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
 os.environ[
-    "OPENAI_API_KEY"] = "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"
+    "OPENAI_API_KEY"] = "sk-proj-API_KEY"
 
 class MCPVectorRAGFree:
     """
