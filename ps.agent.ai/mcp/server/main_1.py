@@ -89,7 +89,7 @@ async def get_weather(city: str) -> dict:
     async with httpx.AsyncClient(timeout=10) as client:
         resp = await client.get(
             "https://api.openweathermap.org/data/2.5/weather",
-            params={"q": city, "appid": '903cf87ba4566f790e8489ea401bb270', "units": "metric"}
+            params={"q": city, "appid": '', "units": "metric"}
         )
         print("response", resp.json())
         if resp.status_code != 200:
