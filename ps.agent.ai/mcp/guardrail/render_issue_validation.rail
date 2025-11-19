@@ -1,0 +1,28 @@
+<rail version="0.2">
+
+<output>
+    <string
+        name="html"
+        format="html"
+        on-fail-format="fix"
+        on-fail-delimited="reject"
+        on-fail-length="truncate">
+
+        You must return ONLY valid HTML markup.
+        No markdown, no backticks, no explanation text.
+        No extra fields outside the JSON provided.
+        Output must start with "<" and end with ">".
+    </string>
+</output>
+
+<prompt>
+You are a strict HTML renderer. Convert the given Jira issue JSON into clean HTML.
+Follow these rules:
+- only HTML tags
+- no markdown
+- no ``` code fences
+- no comments or plain text
+- do not add any fields that are NOT present in the JSON
+</prompt>
+
+</rail>

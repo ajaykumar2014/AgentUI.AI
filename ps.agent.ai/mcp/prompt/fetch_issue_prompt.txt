@@ -1,0 +1,427 @@
+You are an HTML generator.
+You must return ONLY valid HTML.
+Do NOT include markdown, code fences, backticks, explanations, comments, or surrounding text.
+
+
+Your task:
+- Read the provided Jira Issue API JSON response.
+- Extract the required fields.
+- Generate a clean, standalone HTML snippet to display the Jira issue.
+- Do NOT include <html>, <head>, or <body> tags. Only the snippet.
+- Return ONLY HTML. No markdown, no backticks, no explanations.
+
+RESTRICTIONS:
+- STRICT: Output MUST NOT contain ``` or any markdown formatting.
+- STRICT: Output MUST be valid HTML only.
+- STRICT: Output MUST NOT contain JSON, quotes, or anything except HTML tags.
+- STRICT: Do NOT invent fields. Use only what exists in the input JSON.
+- STRICT: If a field is missing, omit it silently.
+
+-----------------------------------------
+FIELDS TO EXTRACT & HOW TO DISPLAY THEM
+-----------------------------------------
+
+1. fields.project.name
+   → Display as an anchor tag <a> using the project self URL.
+   Example: Use project.self but replace the trailing "/<id>" with "/<projectKey>".
+
+2. fields.project.projectTypeKey
+   → Label: "Project Type"
+
+3. issue key (root-level "key")
+   → Display as hyperlink <a> using issue.self.
+   Again, replace the trailing "/<id>" with "/<issueKey>".
+
+4. fields.statusCategory.name
+   → Label: "Status"
+
+5. fields.priority.name
+   → Label: "Priority"
+
+6. fields.description.content[*]
+   → Extract all text nodes under "content" recursively.
+   → Combine into a readable Description section.
+
+7. fields.comment.comments[*].body.content[*].content
+   → Extract each comment’s text from nested content arrays.
+   → Display as a list of comments with author + created date.
+
+-----------------------------------------
+HTML REQUIREMENTS
+-----------------------------------------
+
+- Wrap the full output inside:
+  <div class="jira-issue">
+     ... content ...
+  </div>
+
+- Use clean styling: headings, labels, sections, bullet lists.
+- Use <a> tags wherever hyperlink is needed.
+- Maintain formatting for multiple comments.
+- If any field is missing, skip it (do not break).
+
+-----------------------------------------
+INPUT JSON
+-----------------------------------------
+
+Here is API response -
+{
+    "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations,customfield_10010.requestTypePractice",
+    "id": "10090",
+    "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/10090",
+    "key": "AG-18",
+    "fields": {
+        "statuscategorychangedate": "2025-11-15T20:03:55.415+0530",
+        "issuetype": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issuetype/10008",
+            "id": "10008",
+            "description": "A problem or error.",
+            "iconUrl": "https://agent-ui-ai.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10303?size=medium",
+            "name": "Bug",
+            "subtask": false,
+            "avatarId": 10303,
+            "hierarchyLevel": 0
+        },
+        "timespent": null,
+        "customfield_10030": null,
+        "project": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/project/10001",
+            "id": "10001",
+            "key": "AG",
+            "name": "AgentAI",
+            "projectTypeKey": "software",
+            "simplified": false,
+            "avatarUrls": {
+                "48x48": "https://agent-ui-ai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10407",
+                "24x24": "https://agent-ui-ai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10407?size=small",
+                "16x16": "https://agent-ui-ai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10407?size=xsmall",
+                "32x32": "https://agent-ui-ai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10407?size=medium"
+            }
+        },
+        "customfield_10031": null,
+        "customfield_10032": null,
+        "fixVersions": [],
+        "aggregatetimespent": null,
+        "customfield_10034": null,
+        "statusCategory": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+        },
+        "resolution": null,
+        "customfield_10036": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "watches": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/AG-18/watchers",
+            "watchCount": 1,
+            "isWatching": true
+        },
+        "lastViewed": "2025-11-15T20:06:21.441+0530",
+        "created": "2025-11-15T20:03:55.202+0530",
+        "customfield_10020": null,
+        "customfield_10021": null,
+        "customfield_10022": null,
+        "customfield_10023": null,
+        "priority": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/priority/3",
+            "iconUrl": "https://agent-ui-ai.atlassian.net/images/icons/priorities/medium_new.svg",
+            "name": "Medium",
+            "id": "3"
+        },
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": null,
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10019": "0|i0004f:",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2025-11-18T09:42:56.401+0530",
+        "status": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/status/10004",
+            "description": "",
+            "iconUrl": "https://agent-ui-ai.atlassian.net/",
+            "name": "To Do",
+            "id": "10004",
+            "statusCategory": {
+                "self": "https://agent-ui-ai.atlassian.net/rest/api/3/statuscategory/2",
+                "id": 2,
+                "key": "new",
+                "colorName": "blue-gray",
+                "name": "To Do"
+            }
+        },
+        "components": [],
+        "timeoriginalestimate": null,
+        "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "User reported login failures."
+                        }
+                    ]
+                }
+            ]
+        },
+        "customfield_10010": null,
+        "customfield_10014": null,
+        "customfield_10015": null,
+        "timetracking": {},
+        "customfield_10005": null,
+        "customfield_10006": null,
+        "customfield_10007": null,
+        "security": null,
+        "customfield_10008": null,
+        "attachment": [],
+        "customfield_10009": null,
+        "aggregatetimeestimate": null,
+        "summary": "Login failures",
+        "creator": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+            "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+            "emailAddress": "ajay.jamiahamdard@gmail.com",
+            "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+            },
+            "displayName": "Ajaykumar",
+            "active": true,
+            "timeZone": "Asia/Calcutta",
+            "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "reporter": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+            "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+            "emailAddress": "ajay.jamiahamdard@gmail.com",
+            "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+            },
+            "displayName": "Ajaykumar",
+            "active": true,
+            "timeZone": "Asia/Calcutta",
+            "accountType": "atlassian"
+        },
+        "customfield_10043": null,
+        "aggregateprogress": {
+            "progress": 0,
+            "total": 0
+        },
+        "customfield_10044": null,
+        "customfield_10045": null,
+        "customfield_10001": null,
+        "customfield_10002": [],
+        "customfield_10046": null,
+        "customfield_10003": null,
+        "customfield_10047": null,
+        "customfield_10004": null,
+        "customfield_10048": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+            "progress": 0,
+            "total": 0
+        },
+        "votes": {
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/AG-18/votes",
+            "votes": 0,
+            "hasVoted": false
+        },
+        "comment": {
+            "comments": [
+                {
+                    "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/10090/comment/10065",
+                    "id": "10065",
+                    "author": {
+                        "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "emailAddress": "ajay.jamiahamdard@gmail.com",
+                        "avatarUrls": {
+                            "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+                        },
+                        "displayName": "Ajaykumar",
+                        "active": true,
+                        "timeZone": "Asia/Calcutta",
+                        "accountType": "atlassian"
+                    },
+                    "body": {
+                        "type": "doc",
+                        "version": 1,
+                        "content": [
+                            {
+                                "type": "paragraph",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "Issue has been picked up and it's under analysis. Will update by EOD."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "updateAuthor": {
+                        "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "emailAddress": "ajay.jamiahamdard@gmail.com",
+                        "avatarUrls": {
+                            "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+                        },
+                        "displayName": "Ajaykumar",
+                        "active": true,
+                        "timeZone": "Asia/Calcutta",
+                        "accountType": "atlassian"
+                    },
+                    "created": "2025-11-15T20:05:01.389+0530",
+                    "updated": "2025-11-15T20:05:01.389+0530",
+                    "jsdPublic": true
+                },
+                {
+                    "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/10090/comment/10098",
+                    "id": "10098",
+                    "author": {
+                        "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "emailAddress": "ajay.jamiahamdard@gmail.com",
+                        "avatarUrls": {
+                            "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+                        },
+                        "displayName": "Ajaykumar",
+                        "active": true,
+                        "timeZone": "Asia/Calcutta",
+                        "accountType": "atlassian"
+                    },
+                    "body": {
+                        "type": "doc",
+                        "version": 1,
+                        "content": [
+                            {
+                                "type": "paragraph",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "this is AI generated comments"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "updateAuthor": {
+                        "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "emailAddress": "ajay.jamiahamdard@gmail.com",
+                        "avatarUrls": {
+                            "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+                        },
+                        "displayName": "Ajaykumar",
+                        "active": true,
+                        "timeZone": "Asia/Calcutta",
+                        "accountType": "atlassian"
+                    },
+                    "created": "2025-11-18T09:42:43.744+0530",
+                    "updated": "2025-11-18T09:42:43.744+0530",
+                    "jsdPublic": true
+                },
+                {
+                    "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/10090/comment/10099",
+                    "id": "10099",
+                    "author": {
+                        "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "emailAddress": "ajay.jamiahamdard@gmail.com",
+                        "avatarUrls": {
+                            "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+                        },
+                        "displayName": "Ajaykumar",
+                        "active": true,
+                        "timeZone": "Asia/Calcutta",
+                        "accountType": "atlassian"
+                    },
+                    "body": {
+                        "type": "doc",
+                        "version": 1,
+                        "content": [
+                            {
+                                "type": "paragraph",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "this is 2nd AI generated message"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "updateAuthor": {
+                        "self": "https://agent-ui-ai.atlassian.net/rest/api/3/user?accountId=557058%3A10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "accountId": "557058:10e3de9a-c3b7-44b3-8183-59fd76c2cf78",
+                        "emailAddress": "ajay.jamiahamdard@gmail.com",
+                        "avatarUrls": {
+                            "48x48": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "24x24": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "16x16": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png",
+                            "32x32": "https://secure.gravatar.com/avatar/52f323891e5e487c80d4034887c31f1b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FA-0.png"
+                        },
+                        "displayName": "Ajaykumar",
+                        "active": true,
+                        "timeZone": "Asia/Calcutta",
+                        "accountType": "atlassian"
+                    },
+                    "created": "2025-11-18T09:42:56.401+0530",
+                    "updated": "2025-11-18T09:42:56.401+0530",
+                    "jsdPublic": true
+                }
+            ],
+            "self": "https://agent-ui-ai.atlassian.net/rest/api/3/issue/10090/comment",
+            "maxResults": 3,
+            "total": 3,
+            "startAt": 0
+        },
+        "worklog": {
+            "startAt": 0,
+            "maxResults": 20,
+            "total": 0,
+            "worklogs": []
+        }
+    }
+}

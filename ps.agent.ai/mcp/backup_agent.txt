@@ -1,0 +1,51 @@
+import asyncio
+import os
+from dotenv import load_dotenv
+from langchain_core.runnables.graph import Graph
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.constants import START
+from loguru import logger
+from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent, ToolNode
+from client.mcp_tools import get_mcp_tool
+
+load_dotenv()
+
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
+os.environ["LANGCHAIN_API_KEY"] = "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"
+os.environ["LANGCHAIN_PROJECT"] = "customer-rag-demo"
+os.environ["OPENAI_API_KEY"] ="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"
+# ---------------------------------------------------------------------------
+# 2️⃣  Initialize LLM + MCP tool
+# ---------------------------------------------------------------------------
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+mcp_tool = get_mcp_tool()
+
+
+# ---------------------------------------------------------------------------
+# 3️⃣  Build the agent using LangGraph’s prebuilt ReAct agent
+# ---------------------------------------------------------------------------
+chatbot = create_react_agent(llm, tools=[mcp_tool])
+
+# ---------------------------------------------------------------------------
+# 4️⃣  Run it asynchronously
+# ---------------------------------------------------------------------------
+async def run_agent():
+
+
+    while True:
+        try:
+            user = input("> ").strip()
+            if user.lower() in {"exit", "quit"}:
+                break
+            resp = await chatbot.ainvoke({"messages": [{"role":"user","content": user}]})
+            # LangGraph returns a state; get the assistant message text:
+            last = resp["messages"][-1].content
+            print(last)
+        except KeyboardInterrupt:
+            break
+
+
+if __name__ == "__main__":
+    asyncio.run(run_agent())
